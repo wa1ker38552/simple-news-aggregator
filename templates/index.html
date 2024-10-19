@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>News Aggregator</title>
+        <style>
+            .source, .category {
+                border: solid 1px rgb(183, 183, 183);
+                color: rgb(183, 183, 183);
+                border-radius: 5rem;
+                padding: 0 0.5rem;
+                box-sizing: border-box;
+                font-size: 0.8rem;
+            }
+
+            ul {
+                padding: 0;
+            }
+
+            a {
+                color: dodgerblue;
+                text-decoration: none;
+            }
+
+            a:hover {
+                text-decoration: underline;
+            }
+
+            li {
+                margin-bottom: 0.5rem;
+                border: solid 1px rgb(183, 183, 183);
+                border-radius: 5px;
+                padding: 0.2rem;
+                box-sizing: border-box;
+                border-width: 1px 1px 1px 5px;
+                background: transparent !important;
+            }
+
+            .politics, .politics_embed {
+                border-color: rgb(255, 136, 136);
+                background: rgb(255, 136, 136);
+                color: white;
+            }
+
+            .world, .world_embed {
+                border-color: rgb(77, 170, 67);
+                background: rgb(77, 170, 67);
+                color: white;
+            }
+
+            .health, .health_embed {
+                border-color: rgb(96, 147, 90);
+                background: rgb(96, 147, 90);
+                color: white;
+            }
+
+            .science, .science_embed {
+                border-color: rgb(242, 155, 255);
+                background: rgb(242, 155, 255);
+                color: white;
+            }
+
+            .technology, .technology_embed {
+                border-color: rgb(155, 232, 255);
+                background: rgb(155, 232, 255);
+                color: white;
+            }
+
+            .sports, .sports_embed {
+                border-color: rgb(255, 209, 81);
+                background: rgb(255, 209, 81);
+                color: white;
+            }
+
+            .finance, .finance_embed {
+                border-color: rgb(44, 157, 255);
+                background: rgb(44, 157, 255);
+                color: white;
+            }
+
+            h1, h2, h3 {
+                margin: 0;
+            }
+
+            h3 {
+                font-weight: normal;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>News Aggregator</h1>
+        <h2>Last updated {{ last_updated }}</h2>
+        <h3 style="display: flex; align-items: center; gap: 0.25rem">
+            <span>{{ news | selectattr('category', 'equalto', 'politics') | list | length }} political articles •</span>
+            <span>{{ news | selectattr('category', 'equalto', 'world') | list | length }} world articles •</span>
+            <span>{{ news | selectattr('category', 'equalto', 'health') | list | length }} health articles •</span>
+            <span>{{ news | selectattr('category', 'equalto', 'science') | list | length }} science articles •</span>
+            <span>{{ news | selectattr('category', 'equalto', 'technology') | list | length }} technology articles •</span>
+            <span>{{ news | selectattr('category', 'equalto', 'sports') | list | length }} sports articles •</span>
+            <span>{{ news | selectattr('category', 'equalto', 'finance') | list | length }} finance articles •</span>
+            <span>{{ news | selectattr('category', 'equalto', null) | list | length }} uncategorized articles</span>
+
+        </h3>
+        <ul>
+            {% for link in news %}
+                <li class="{{link['category']}}_embed">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 0.2rem; margin-bottom: 0.2rem;">
+                            <span class="source">{{ link['source'].upper() }}</span>
+                            <span class="category">{{ link['relevancy'] }}/10</span>
+                            {% if link['category'] %}
+                                <span class="category {{link['category']}}">{{ link['category'] }}</span>
+                            {% else %}
+                                <span class="category">other</span>
+                            {% endif %}
+                        </div>
+                        <a href="{{ link['url'] }}" target="_blank">{{ link['title'] }}</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>
